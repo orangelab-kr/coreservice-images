@@ -1,0 +1,168 @@
+{
+  "Records": [
+    {
+      "cf": {
+        "config": {
+          "distributionDomainName": "THIS_IS_TEST",
+          "distributionId": "THIS_IS_TEST",
+          "eventType": "origin-response",
+          "requestId": "THIS_IS_TEST"
+        },
+        "request": {
+          "clientIp": "1.1.1.1",
+          "headers": {
+            "x-forwarded-for": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "1.1.1.1"
+              }
+            ],
+            "user-agent": [
+              {
+                "key": "User-Agent",
+                "value": "Amazon CloudFront"
+              }
+            ],
+            "via": [
+              {
+                "key": "Via",
+                "value": "2.0 THIS_IS_TEST (CloudFront)"
+              }
+            ],
+            "accept-encoding": [
+              {
+                "key": "Accept-Encoding",
+                "value": "gzip"
+              }
+            ],
+            "sec-ch-ua": [
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Chromium\";v=\"92\", \" Not A;Brand\";v=\"99\", \"Google Chrome\";v=\"92\""
+              }
+            ],
+            "sec-ch-ua-mobile": [
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              }
+            ],
+            "dnt": [
+              {
+                "key": "dnt",
+                "value": "1"
+              }
+            ],
+            "upgrade-insecure-requests": [
+              {
+                "key": "upgrade-insecure-requests",
+                "value": "1"
+              }
+            ],
+            "sec-fetch-site": [
+              {
+                "key": "sec-fetch-site",
+                "value": "none"
+              }
+            ],
+            "sec-fetch-mode": [
+              {
+                "key": "sec-fetch-mode",
+                "value": "navigate"
+              }
+            ],
+            "sec-fetch-user": [
+              {
+                "key": "sec-fetch-user",
+                "value": "?1"
+              }
+            ],
+            "sec-fetch-dest": [
+              {
+                "key": "sec-fetch-dest",
+                "value": "document"
+              }
+            ],
+            "host": [
+              {
+                "key": "Host",
+                "value": "THIS_IS_TEST"
+              }
+            ]
+          },
+          "method": "GET",
+          "origin": {
+            "s3": {
+              "authMethod": "none",
+              "customHeaders": {},
+              "domainName": "THIS_TEST",
+              "path": ""
+            }
+          },
+          "querystring": "f=webp&h=100&w=100&q=100&p=inside",
+          "uri": "/images/test"
+        },
+        "response": {
+          "headers": {
+            "x-amz-id-2": [
+              {
+                "key": "x-amz-id-2",
+                "value": "THIS_IS_TEST"
+              }
+            ],
+            "x-amz-request-id": [
+              {
+                "key": "x-amz-request-id",
+                "value": "THIS_IS_TEST"
+              }
+            ],
+            "date": [
+              {
+                "key": "Date",
+                "value": "Tue, 17 Aug 2021 13:26:17 GMT"
+              }
+            ],
+            "last-modified": [
+              {
+                "key": "Last-Modified",
+                "value": "Tue, 17 Aug 2021 13:12:28 GMT"
+              }
+            ],
+            "etag": [
+              {
+                "key": "ETag",
+                "value": "\"THIS_IS_TEST\""
+              }
+            ],
+            "accept-ranges": [
+              {
+                "key": "Accept-Ranges",
+                "value": "bytes"
+              }
+            ],
+            "server": [
+              {
+                "key": "Server",
+                "value": "AmazonS3"
+              }
+            ],
+            "content-type": [
+              {
+                "key": "Content-Type",
+                "value": "image/webp"
+              }
+            ],
+            "content-length": [
+              {
+                "key": "Content-Length",
+                "value": "728680"
+              }
+            ]
+          },
+          "status": "200",
+          "statusDescription": "OK"
+        }
+      }
+    }
+  ]
+}
