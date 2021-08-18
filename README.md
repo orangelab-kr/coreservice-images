@@ -1,1 +1,1 @@
-# TypeScript Template
+# CoreService Images
