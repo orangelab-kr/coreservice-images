@@ -7,7 +7,7 @@ module.exports = {
   mode: 'none',
   target: 'node',
   entry: slsw.lib.entries,
-  externals: [nodeExternals({ modulesFromFile: true })],
+  externals: [nodeExternals()],
   resolve: {
     extensions: ['.ts', '.js'],
   },

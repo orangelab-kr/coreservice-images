@@ -3,32 +3,30 @@ useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: ${opt:stage, 'dev'}
+  runtime: nodejs14.x
+  region: ap-northeast-2
+  stage: ${opt.stage, 'stage'}
   lambdaHashingVersion: '20201221'
+  apiGateway:
+    shouldStartNameWithService: true
 
 package:
   individually: true
 
 plugins:
   - serverless-webpack
-  - serverless-lambda-edge-pre-existing-cloudfront
+  - serverless-offline
 
 custom:
   webpack:
     includeModules: true
     packager: 'yarn'
-    packagerOptions:
-      scripts:
-        - SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn add --force sharp
+  serverless-offline:
+    noPrependStageInUrl: true
 
 functions:
   app:
     handler: src/index.handler
     events:
-      - preExistingCloudFront:
-          distributionId: E1MP7UOCN21POF
-          eventType: origin-response
-          pathPattern: /images/**
-          includeBody: false
+      - http: 'ANY /'
+      - http: 'ANY /{proxy+}'
