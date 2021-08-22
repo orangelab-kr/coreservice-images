@@ -19,5 +19,5 @@ app.all(
   })
 );
 
-const options = { basePath: '/' };
+const options = { basePath: '/v1/images' };
 export const handler = serverless(app, options);
