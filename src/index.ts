@@ -3,6 +3,7 @@ import serverless from 'serverless-http';
 import { getRouter, InternalError, LoggerMiddleware, OPCODE, Wrapper } from '.';
 
 export * from './middlewares';
+export * from './controllers';
 export * from './routes';
 export * from './tools';
 
