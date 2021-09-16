@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { $$$, clusterInfo, Image, OPCODE, UserMiddleware, Wrapper } from '..';
 
 export function getRouter(): Router {
@@ -14,6 +14,7 @@ export function getRouter(): Router {
   router.post(
     '/',
     UserMiddleware(),
+    express.raw({ type: '*/*', limit: '10mb' }),
     Wrapper(async (req, res) => {
       const { user } = req.loggined;
       const { metadata, buffer } = await Image.getConvertedImage(req.body);
