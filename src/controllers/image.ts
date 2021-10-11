@@ -1,10 +1,8 @@
 import { ImageModel, Prisma } from '@prisma/client';
 import AWS from 'aws-sdk';
 import Sharp from 'sharp';
-import { UserModel } from '..';
-import { Database } from '../tools';
+import { prisma, UserModel } from '..';
 
-const { prisma } = Database;
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
