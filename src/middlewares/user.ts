@@ -22,7 +22,7 @@ export function UserMiddleware(): WrapperCallback {
   return Wrapper(async (req, res, next) => {
     const { headers } = req;
     const { authorization } = headers;
-    if (typeof authorization !== 'string') throw Error();
+    if (typeof authorization !== 'string') throw RESULT.INVALID_ERROR();
     const sessionId = authorization.substr(7);
     const { user } = await getCoreServiceClient('accounts')
       .post(`users/authorize`, { json: { sessionId } })
