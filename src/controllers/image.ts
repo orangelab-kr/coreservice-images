@@ -21,11 +21,12 @@ export class Image {
     user: UserModel;
     metadata: Sharp.Metadata;
   }): Promise<() => Prisma.Prisma__ImageModelClient<ImageModel>> {
-    const metadata: any = props.metadata;
-    const { userId } = props.user;
+    const { metadata }: any = props;
+    const { provider } = props.user;
+    const userId = provider === 'hikick' ? props.user.userId : null;
     return () =>
       prisma.imageModel.create({
-        data: { userId, metadata },
+        data: { provider, userId, metadata },
       });
   }
 

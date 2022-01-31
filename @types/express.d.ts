@@ -5,7 +5,7 @@ declare global {
   namespace Express {
     interface Request {
       loggined: {
-        sessionId: string;
+        sessionId?: string;
         user: UserModel;
       };
     }

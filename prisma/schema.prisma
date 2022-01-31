@@ -4,15 +4,15 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["native"]
-  previewFeatures = ["nApi"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 model ImageModel {
   imageId String @id @default(uuid())
 
-  userId   String
+  provider String
+  userId   String?
   metadata Json
 
   createdAt DateTime  @default(now())
