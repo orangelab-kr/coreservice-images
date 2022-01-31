@@ -1,7 +1,9 @@
 import { ImageModel, Prisma } from '@prisma/client';
 import AWS from 'aws-sdk';
 import Sharp from 'sharp';
-import { prisma, UserModel } from '..';
+import { hash } from 'bcryptjs';
+import { Joi, prisma, UserModel } from '..';
+import crypto from 'crypto';
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -20,13 +22,14 @@ export class Image {
   public static async createImage(props: {
     user: UserModel;
     metadata: Sharp.Metadata;
+    encryptKey?: string;
   }): Promise<() => Prisma.Prisma__ImageModelClient<ImageModel>> {
-    const { metadata }: any = props;
+    const { metadata, encryptKey }: any = props;
     const { provider } = props.user;
     const userId = provider === 'hikick' ? props.user.userId : null;
     return () =>
       prisma.imageModel.create({
-        data: { provider, userId, metadata },
+        data: { provider, userId, metadata, encryptKey },
       });
   }
 
@@ -43,10 +46,19 @@ export class Image {
   }
 
   public static async getConvertedImage(
-    object: Buffer
-  ): Promise<{ buffer: Buffer; metadata: Sharp.Metadata }> {
+    object: Buffer,
+    props: { key?: string }
+  ): Promise<{
+    buffer: Buffer;
+    metadata: Sharp.Metadata;
+    encryptKey?: string;
+  }> {
     const sharp = Sharp(object);
     const metadata = await sharp.metadata();
+    const { key } = await Joi.object({
+      key: Joi.string().optional(),
+    }).validateAsync(props);
+
     delete metadata.tifftagPhotoshop;
     delete metadata.exif;
     delete metadata.icc;
@@ -55,12 +67,22 @@ export class Image {
 
     const height = this.getSize(metadata.height, this.maxHeight);
     const width = this.getSize(metadata.width, this.maxWidth);
-    const buffer = await sharp
+    let buffer = await sharp
       .resize({ height, width, fit: 'inside' })
       .toFormat('webp', { quality: 100 })
       .toBuffer();
 
-    return { buffer, metadata };
+    let encryptKey;
+    if (key) {
+      const algorithm = 'aes-256-cbc';
+      const iv = Buffer.alloc(16, 0);
+      const cryptedKey = crypto.scryptSync(key, 'salt', 32);
+      const cipher = crypto.createCipheriv(algorithm, cryptedKey, iv);
+      buffer = Buffer.concat([cipher.update(buffer), cipher.final()]);
+      encryptKey = await hash(key, 10);
+    }
+
+    return { buffer, metadata, encryptKey };
   }
 
   public static async uploadToS3(key: string, buffer: Buffer): Promise<void> {
