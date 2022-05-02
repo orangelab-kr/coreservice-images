@@ -4,5 +4,6 @@
   "PERMISSION_DENIED": "You do not have permission. (%s)",
   "INVALID_ERROR": "An unknown error has occurred.",
   "FAILED_VALIDATE": "Please enter the correct information.",
-  "INVALID_API": "Invalid API address."
+  "INVALID_API": "Invalid API address.",
+  "IMAGE_NOT_INCLUDED": "Image not included."
 }
