@@ -1,5 +1,15 @@
 import express, { Router } from 'express';
-import { $$$, clusterInfo, Image, RESULT, UserMiddleware, Wrapper } from '..';
+import {
+  $$$,
+  clusterInfo,
+  Image,
+  ImageProperty,
+  RESULT,
+  UserMiddleware,
+  Wrapper,
+} from '..';
+import { ContentTypeMiddleware } from '../middlewares/contentType';
+import { Multer } from '../tools/multer';
 
 export function getRouter(): Router {
   const router = Router();
@@ -14,21 +24,26 @@ export function getRouter(): Router {
   router.post(
     '/',
     UserMiddleware(),
-    express.raw({ type: '*/*', limit: '10mb' }),
+    ContentTypeMiddleware(),
     Wrapper(async (req) => {
-      const { body, query } = req;
+      const { query } = req;
       const { user } = req.loggined;
-      const { metadata, buffer, encryptKey } = await Image.getConvertedImage(
-        body,
-        query
-      );
+      let image: ImageProperty;
+      if (req.file) {
+        image = await Image.getConvertedImage(req.file.buffer, query);
+      } else if (req.body && req.body.length) {
+        image = await Image.getConvertedImage(req.body, query);
+      } else {
+        throw RESULT.IMAGE_NOT_INCLUDED();
+      }
 
+      const { metadata, buffer, encryptKey } = image;
       const { imageId } = await $$$(
         Image.createImage({ user, metadata, encryptKey })
       );
 
       const url = `${process.env.CDN_IMAGES_URL}/${imageId}`;
-      await Image.uploadToS3(imageId, buffer);
+      Image.uploadToS3(imageId, buffer);
       throw RESULT.SUCCESS({ details: { url } });
     })
   );

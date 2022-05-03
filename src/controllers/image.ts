@@ -10,6 +10,12 @@ AWS.config.update({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
+export interface ImageProperty {
+  buffer: Buffer;
+  metadata: Sharp.Metadata;
+  encryptKey?: string;
+}
+
 export class Image {
   public static maxHeight = 2048;
   public static maxWidth = 2048;
@@ -48,11 +54,7 @@ export class Image {
   public static async getConvertedImage(
     object: Buffer,
     props: { key?: string }
-  ): Promise<{
-    buffer: Buffer;
-    metadata: Sharp.Metadata;
-    encryptKey?: string;
-  }> {
+  ): Promise<ImageProperty> {
     const sharp = Sharp(object);
     const metadata = await sharp.metadata();
     const { key } = await Joi.object({
