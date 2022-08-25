@@ -1,11 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
-import {
-  getCoreServiceClient,
-  logger,
-  RESULT,
-  Wrapper,
-  WrapperCallback,
-} from '..';
+import { getCoreServiceClient, RESULT, Wrapper, WrapperCallback } from '..';
 
 export interface HikickUserModel {
   provider: 'hikick';
@@ -23,7 +17,11 @@ export interface MykickUserModel {
   provider: 'mykick';
 }
 
-export type UserModel = HikickUserModel | MykickUserModel;
+export interface BackofficeUserModel {
+  provider: 'backoffice';
+}
+
+export type UserModel = HikickUserModel | MykickUserModel | BackofficeUserModel;
 
 export function UserMiddleware(): WrapperCallback {
   return Wrapper(async (req, res, next) => {
@@ -33,10 +31,12 @@ export function UserMiddleware(): WrapperCallback {
     const sessionId = authorization.substring(7);
     if (sessionId === 'mykick') {
       req.loggined = { user: { provider: 'mykick' } };
+    } else if (sessionId === 'backoffice') {
+      req.loggined = { user: { provider: 'backoffice' } };
     } else {
       const { user } = await getCoreServiceClient('accounts')
         .post(`users/authorize`, { json: { sessionId } })
-        .json();
+        .json<{ opcode: number; user: HikickUserModel }>();
 
       req.loggined = {
         sessionId: sessionId,

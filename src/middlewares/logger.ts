@@ -1,4 +1,4 @@
-import { WrapperCallback, logger, Wrapper } from '..';
+import { logger, Wrapper, WrapperCallback } from '..';
 
 export function LoggerMiddleware(): WrapperCallback {
   return Wrapper(async (req, res, next) => {

@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import {
   $$$,
   clusterInfo,
@@ -9,14 +9,13 @@ import {
   Wrapper,
 } from '..';
 import { ContentTypeMiddleware } from '../middlewares/contentType';
-import { Multer } from '../tools/multer';
 
 export function getRouter(): Router {
   const router = Router();
 
   router.get(
     '/',
-    Wrapper(async (req) => {
+    Wrapper(async () => {
       throw RESULT.SUCCESS({ details: clusterInfo });
     })
   );
